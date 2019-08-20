@@ -1,0 +1,35 @@
+{
+  "name": "@cloudflare/db-connect",
+  "version": "0.0.1",
+  "description": "Connect your SQL database to Cloudflare Workers.",
+  "repository": "github:cloudflare/db-connect",
+  "homepage": "https://github.com/cloudflare/db-connect#readme",
+  "author": "Ashcon Partovi <ashcon@partovi.net>",
+  "license": "MIT",
+  "main": "dist/db-connect.cjs.js",
+  "module": "dist/db-connect.esm.js",
+  "browser": "dist/db-connect.umd.js",
+  "types": "src/index.ts",
+  "devDependencies": {
+    "rollup": "^0.68.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "sql",
+    "postgres",
+    "mysql",
+    "database",
+    "workers",
+    "cloudflare"
+  ],
+  "dependencies": {}
+}
