@@ -1,9 +1,11 @@
 name: Release
 
 on:
-  release:
-    tags:
-      - published
+  push:
+    branches:
+      - master
+    paths:
+    - package*.json
 
 jobs:
   publish:
