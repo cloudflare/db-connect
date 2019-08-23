@@ -1,0 +1,10 @@
+{
+  "name": "db-connect-example",
+  "version": "1.0.0",
+  "description": "A template for quickstarting Cloudflare Workers and SQL",
+  "main": "index.js",
+  "author": "Ashcon Partovi <ashcon@cloudflare.com>",
+  "dependencies": {
+    "@cloudflare/db-connect": "0.0.4"
+  }
+}

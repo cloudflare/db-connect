@@ -2,6 +2,12 @@
 
 Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com/). Import this lightweight Javascript library to execute commands or cache queries from a database through an [Argo Tunnel](https://developers.cloudflare.com/argo-tunnel/quickstart/). Although designed for Workers, this library can be used in any environment that has access to the [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Syntax) and [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#Syntax) APIs.
 
+# Installation
+
+```bash
+npm i @cloudflare/db-connect
+```
+
 # Example
 
 ```js
@@ -33,63 +39,6 @@ async function findBirthday(name) {
 }
 
 findBirthday('Matthew').then(bday => console.log(bday))
-```
-
-# Setup
-
-## 1. [Access](https://developers.cloudflare.com/access/service-auth/service-token/)
-
-Go to your Cloudflare dashboard under "Access" and generate a new service token.
-
-![](https://developers.cloudflare.com/access/static/srv-generate.png)
-
-Copy and save the `Client ID` and `Client Secret`, you will need this later to connect to the database.
-
-![](https://developers.cloudflare.com/access/static/srv-secret.png)
-
-Create an access policy for your specified `hostname` using the service token.
-
-![](https://developers.cloudflare.com/access/static/srv-tokenname.png)
-
-## 2. [Argo Tunnel](https://developers.cloudflare.com/argo-tunnel/quickstart/)
-
-Install `cloudflared` on the server where your database is running. If you are using a managed database, you can install it on a nearby VM.
-
-```bash
-brew install cloudflare/cloudflare/cloudflared
-```
-
-Start the tunnel in `db-connect` mode, providing a hostname and your database connection URL.
-
-```bash
-cloudflared db-connect --hostname db.myzone.com --url postgres://user:pass@localhost?sslmode=disable --insecure
-```
-
-If you want to deploy using Docker or Kubernetes, see our guide [here](https://developers.cloudflare.com/argo-tunnel/reference/sidecar/). You can alternatively specify the following environment variables: `TUNNEL_HOSTNAME` and `TUNNEL_URL`.
-
-
-## 3. Code
-
-Import the `db-connect` library in your Cloudflare Workers or browser project.
-
-```bash
-npm install @cloudflare/db-connect
-```
-
-Now initalize the client and start coding!
-
-```js
-import { DbConnect } from '@cloudflare/db-connect'
-
-const db = new DbConnect({
-  host: 'db.myzone.com',
-  clientId: 'xxx',
-  clientSecret: 'xxx'
-})
-
-async function doPing() {
-  const resp = await db.ping()
-}
 ```
 
 # Databases
@@ -171,6 +120,16 @@ async function mySubmit() {
 }
 ```
 
+# Quickstart
+
+`db-connect` requires that you setup Cloudflare Access, Argo Tunnel, and Workers. You can use the quickstart command below or  read the [`quickstart`](QUICKSTART.md) file for details on how to set this up yourself.
+
+```
+node node_modules/@cloudflare/db-connect/quickstart.js
+```
+
+[![asciicast](https://asciinema.org/a/fRCba0SZ5gw5nq5HcCRm7WpJW.svg)](https://asciinema.org/a/fRCba0SZ5gw5nq5HcCRm7WpJW)
+
 # Testing
 
 If you want to test `db-connect` without a database you can use the following command to create an in-memory SQLite3 database:
@@ -180,4 +139,4 @@ cloudflared db-connect --playground
 
 # Beta Access
 
-We are looking for beta testers who want to create applications using `db-connect`, especially on Cloudflare Workers. If you have a use-case or an idea, [reach out](mailto:ashcon@cloudflare.com) to us and we'll consider giving you with special access!
+We are looking for beta testers who want to create applications using `db-connect` using Cloudflare Workers. If you have a use-case or an idea, [reach out](mailto:ashcon@cloudflare.com) to us and we'll consider giving you with special access!

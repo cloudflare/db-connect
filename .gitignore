@@ -1,5 +1,6 @@
 .DS_Store
 node_modules/
-example/
 dist/
-
+example/dist/
+example/node_modules/
+example/worker/
