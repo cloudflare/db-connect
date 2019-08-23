@@ -24,7 +24,7 @@ async function entrypoint() {
         const group = await getAccessGroup(zone.account.id, token.id)
         const policy = await getAccessPolicy(zone.id, app.id, group.id)
         command = getCommand(app.domain, org.auth_domain, app.aud)
-        code = getCode(app.domain, token.client_id + '.' + zone.name, token.client_secret)
+        code = getCode(app.domain, token.client_id, token.client_secret)
       }
     }
   }
