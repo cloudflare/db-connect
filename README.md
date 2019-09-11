@@ -1,5 +1,7 @@
 # db-connect
 
+### This is an experimental project, it has not yet been released and may be removed at any time.
+
 Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com/). Import this lightweight Javascript library to execute commands or cache queries from a database through an [Argo Tunnel](https://developers.cloudflare.com/argo-tunnel/quickstart/). Although designed for Workers, this library can be used in any environment that has access to the [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Syntax) and [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#Syntax) APIs.
 
 # Installation
