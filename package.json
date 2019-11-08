@@ -1,6 +1,6 @@
 {
   "name": "@cloudflare/db-connect",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Connect your SQL database to Cloudflare Workers.",
   "repository": "github:cloudflare/db-connect",
   "homepage": "https://github.com/cloudflare/db-connect#readme",
@@ -10,6 +10,13 @@
   "module": "dist/db-connect.esm.js",
   "browser": "dist/db-connect.umd.js",
   "types": "src/index.ts",
+  "bin": {
+    "@cloudflare/db-connect-quickstart": "bin/quickstart",
+    "db-connect-quickstart": "bin/quickstart"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "email-validator": "^2.0.4",
     "enquirer": "^2.3.1",
@@ -24,7 +31,9 @@
     "prepare": "npm run build"
   },
   "files": [
-    "dist"
+    "dist/",
+    "bin/",
+    "example/"
   ],
   "keywords": [
     "sql",

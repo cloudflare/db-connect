@@ -7,7 +7,7 @@ Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com
 # Installation
 
 ```bash
-npm i @cloudflare/db-connect
+npm i -s @cloudflare/db-connect
 ```
 
 # Example
@@ -41,6 +41,15 @@ async function findBirthday(name) {
 }
 
 findBirthday('Matthew').then(bday => console.log(bday))
+```
+
+# Quickstart
+
+`db-connect` requires that you setup Cloudflare Access, Argo Tunnel, and Workers. You can use the quickstart command below or read the [`quickstart`](QUICKSTART.md) file for details on how to set this up yourself.
+
+```
+npm i -g @cloudflare/db-connect
+db-connect-quickstart
 ```
 
 # Databases
@@ -94,7 +103,7 @@ const cmd = new Command({
   statement, // required, the database statement to submit.
   arguments, // optional, either an array or object of arguments.
   mode,      // optional, type of command as either 'query' or 'exec'.
-  isolation, // optional, type of transaction isolation, defaults to 'default'.
+  isolation, // optional, type of transaction isolation, defaults to 'none' for no transactions.
   timeout,   // optional, number of seconds before a timeout, defaults to infinite.
   cacheTtl,  // optional, number of seconds to cache responses, defaults to -1.
   staleTtl,  // optional, after cacheTtl expires, number of seconds to serve stale, defaults to -1.
@@ -121,16 +130,6 @@ async function mySubmit() {
   throw new Error(await resp.text())
 }
 ```
-
-# Quickstart
-
-`db-connect` requires that you setup Cloudflare Access, Argo Tunnel, and Workers. You can use the quickstart command below or  read the [`quickstart`](QUICKSTART.md) file for details on how to set this up yourself.
-
-```
-node node_modules/@cloudflare/db-connect/quickstart.js
-```
-
-[![asciicast](https://asciinema.org/a/fRCba0SZ5gw5nq5HcCRm7WpJW.svg)](https://asciinema.org/a/fRCba0SZ5gw5nq5HcCRm7WpJW)
 
 # Testing
 

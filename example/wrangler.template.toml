@@ -1,0 +1,4 @@
+name = "db-connect-quickstart"
+type = "webpack"
+workers_dev = true
+account_id = "$ACCOUNT"

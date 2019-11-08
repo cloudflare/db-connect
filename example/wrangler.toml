@@ -1,6 +1,0 @@
-name = "db-connect-example"
-type = "webpack"
-private = true
-zone_id = ""
-account_id = ""
-route = ""

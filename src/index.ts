@@ -173,7 +173,7 @@ class CommandInit {
         if(!this.arguments) this.arguments = []
         if(!this.mode) this.mode = Mode.query
         if(!this.timeout) this.timeout = 0
-        if(!this.isolation) this.isolation = Isolation.default
+        if(!this.isolation) this.isolation = Isolation.none
         if(!this.cacheTtl) this.cacheTtl = -1
         if(!this.staleTtl) this.staleTtl = this.cacheTtl
     }
@@ -197,6 +197,7 @@ export enum Mode {
  * @link https://golang.org/pkg/database/sql/#IsolationLevel
  */
 export enum Isolation {
+    none            = "none",
     default         = "default",
     readUncommitted = "read_uncommitted",
     readCommitted   = "read_committed",
