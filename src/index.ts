@@ -1,16 +1,29 @@
 /**
  * DbConnect, access your SQL database from Cloudflare Workers or the browser.
- * 
+ *
  * @example
- *  const db = new DbConnect('sql.mysite.com')
- * 
+ *  const db = new DbConnect({
+ *    host: 'sql.mysite.com',
+ *    clientId: '<insert-my-access-client-id>',
+ *    clientSecret: '<insert-my-access-client-secret>' })
+ *
  *  db.ping()
- *  db.exec('CREATE TABLE firewall VALUES (ip INT)')
- *  db.query('INSERT INTO firewall VALUES (?), (?)', [1111, 1001])
- *  db.query('SELECT COUNT(*) FROM firewall', {cacheTtl: 60})
  * 
+ *  db.submit({
+ *    statement: 'CREATE TABLE firewall VALUES (ip INT)' })
+ *
+ *  db.submit({
+ *    mode: 'exec',
+ *    statement: 'INSERT INTO firewall VALUES (?), (?)',
+ *    arguments: [1111, 1001] })
+ *
+ *  db.submit({
+ *   mode: 'query',
+ *   statement: 'SELECT COUNT(*) FROM firewall',
+ *   cacheTtl: 60 })
+ *
  *  async function do() {
- *    const resp = await db.query('SELECT * FROM firewall')
+ *    const resp = await db.query({ statement: 'SELECT * FROM firewall' })
  *    if(resp.ok) {
  *      const rows = await resp.json()
  *      // [ { "ip": 1111 }, { "ip": 1001 } ]
@@ -30,7 +43,7 @@ export class DbConnect {
      * @param clientId recommended, client id of the Access policy for your host.
      * @param clientSecret recommended, client secret of the Access policy for your host.
      */
-    constructor(parameters: object) {
+    constructor(parameters: DbConnectInit | object) {
         const init = new DbConnectInit(parameters)
 
         const url = new URL(init.host)
@@ -52,10 +65,10 @@ export class DbConnect {
     /**
      * Ping tests the connection to the database.
      * 
-     * To reduce latency, pings will be served stale for up to 3 seconds.
+     * To reduce latency, pings will be served stale for up to 1 second.
      * 
      * @example
-     *  const db = new DbConnect({...})
+     *  const db = new DbConnect({ ... })
      *  
      *  async function doPing() {
      *    const resp = await db.ping()
@@ -66,17 +79,19 @@ export class DbConnect {
      *  }
      */
     public async ping(): Promise<Response> {
-        return this.httpClient.fetch('ping', {method: 'GET'}, 0, 3)
+        return this.httpClient.fetch('ping', {method: 'GET'}, 0, 1)
     }
 
     /**
      * Submit sends a Command to the database and fetches a Response.
      * 
      * @example
-     *  const db = new DbConnect({...})
+     *  const db = new DbConnect({ ... })
      *  
      *  async function doSubmit() {
-     *    const cmd = new Command('SELECT * FROM users WHERE name = ? AND age > ?', ['matthew', 21])
+     *    const cmd = new Command({
+     *      statement: 'SELECT * FROM users WHERE name = ? AND age > ?',
+     *      arguments: ['matthew', 21] })
      *    const resp = await db.submit(cmd)
      *    if(resp.ok) {
      *      return await resp.json()
@@ -85,8 +100,6 @@ export class DbConnect {
      *  }
      * 
      * @param command required, the command to submit.
-     * @param cacheTtl optional, number of seconds to cache the response.
-     * @param staleTtl optional, number of seconds to serve the response while stale.
      */
     public async submit(command: Command | object): Promise<Response> {
         if(!(command instanceof Command)) command = new Command(command)
@@ -145,7 +158,7 @@ export class Command {
      * @param cacheTtl number of seconds to cache responses, defaults to -1.
      * @param staleTtl after cacheTtl expires, number of seconds to serve stale responses.
      */
-    constructor(parameters: object) {
+    constructor(parameters: CommandInit | object) {
         const init = new CommandInit(parameters)
 
         Object.assign(this, init)
