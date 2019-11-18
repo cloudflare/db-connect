@@ -245,11 +245,15 @@ class HttpClient {
     public async fetch(path: string, init?: RequestInit, cacheTtl?: number, staleTtl?: number): Promise<Response> {
         const key = await this.cacheKey(path, init)
 
+        if(cacheTtl < 0 && staleTtl < 0) {
+            return this.fetchOrigin(path, init)
+        }
+
         var response = await this.cache.match(key, {ignoreMethod: true})
         if(!response) {
             response = await this.fetchOrigin(path, init)
-
             response.headers.set('Cache-control', this.cacheHeader(cacheTtl, staleTtl))
+
             await this.cache.put(key, response.clone())
         }
 
@@ -316,7 +320,7 @@ class HttpClient {
     private cacheHeader(cacheTtl?: number, staleTtl?: number): string {
         var cache = 'public'
 
-        if(cacheTtl < 0 && staleTtl < 0) cache = 'no-store'
+        if(cacheTtl < 0 && staleTtl < 0) cache = 'private no-store no-cache'
         if(cacheTtl >= 0) cache += `, max-age=${cacheTtl}`
         if(staleTtl >= 0) cache += `, stale-while-revalidate=${staleTtl}`
 
