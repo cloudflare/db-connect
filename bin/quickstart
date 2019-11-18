@@ -2,6 +2,7 @@
 
 const fetch = require('node-fetch')
 const fs = require('fs')
+const path = require('path')
 const { prompt } = require('enquirer')
 const { validate } = require('email-validator')
 const { bold, green } = require('ansi-colors')
@@ -13,10 +14,14 @@ const headers = {
 }
 
 async function entrypoint() {
+  console.log(bold.whiteBright('Starting db-connect quickstart...'))
+
   const user = await getUser()
   const zone = await getZone()
+  const account = await getAccount(zone ? zone.account.id : null)
+
   var command = getCloudflaredCommand()
-  var code = getCodeSnippet('xxx-xxx-xxx-xxx.trycloudflare.com')
+  var code = getCodeSnippet('xxx-replace-me-xxx.trycloudflare.com')
   if(zone) {
     const argo = await hasArgo(zone.id)
     if(argo) {
@@ -31,24 +36,42 @@ async function entrypoint() {
       }
     }
   }
-  writeTemplate(zone.account.id, code)
+
+  writeTemplate(account.id, code)
+
   console.log(bold.whiteBright('\n1. Run the following command to start db-connect:\n'))
   console.log(green(command))
   console.log(bold.whiteBright('\n2. Put the following code in a Worker to submit queries:\n'))
   console.log(green(code))
   console.log(bold.whiteBright('\n3. Run \"wrangler publish\" in the example/ directory for an example!'))
   console.log()
+
   return ''
 }
 
 async function getUser() {
   headers['X-Auth-Email'] = await ask('Cloudflare email?', (_ => true), { validate })
   var user = null
-  await ask('Cloudflare auth key?', async key => {
+  await ask('Cloudflare global api key?', async key => {
     headers['X-Auth-Key'] = key
     return fetchCf('/user').then(res => { user = res })
   }, { type: 'password' })
   return user
+}
+
+async function getAccount(accountId = null) {
+  if(accountId) {
+    return fetchCf(`/accounts/${accountId}`)
+  }
+  const accounts = await fetchCf('/accounts?page=1&per_page=21&direction=desc')
+  if(accounts.length < 1) {
+    return null
+  }
+  if(accounts.length > 20) {
+    return ask('Cloudflare account id?', getAccount)
+  }
+  const accountMap = new Map(accounts.map(account => [account.name, account.id]))
+  return askList('Cloudflare account?', accountMap).then(getAccount)
 }
 
 async function getZone(zoneId = null) {
@@ -92,7 +115,7 @@ async function getAccessOrganization(accountId) {
     .catch(async err => {
       const ok = await askOk('Cloudflare Access is required, is it okay to enable?')
       if(!ok) return null
-      return ask('Cloudflare access name?', name => {
+      return ask('Cloudflare Access subdomain name?', name => {
         name = `${name}.cloudflareaccess.com`
         return fetchCf(`/accounts/${accountId}/access/organizations`, 'POST', { name, auth_domain: name })
       })
@@ -113,7 +136,7 @@ async function getAccessApplication(zoneId, hostname = null) {
       throw err
     })
   }
-  return ask('Cloudflare hostname?', async hostname => {
+  return ask('Cloudflare Argo Tunnel hostname?', async hostname => {
     return getAccessApplication(zoneId, hostname)
   })
 }
@@ -144,13 +167,13 @@ async function getAccessToken(accountId) {
 }
 
 function writeTemplate(accountId, codeSnippet) {
-  const dir = __dirname + '/example/'
+  const dir = file => path.resolve(__dirname, '..', 'example', file)
   try {
-    var index = fs.readFileSync(dir + 'index.template.js', 'utf8').replace('\$CODE', codeSnippet)
-    var wrangler = fs.readFileSync(dir + 'wrangler.template.toml', 'utf8').replace('\$ACCOUNT', accountId)
+    var index = fs.readFileSync(dir('index.template.js'), 'utf8').replace('\$CODE', codeSnippet)
+    var wrangler = fs.readFileSync(dir('wrangler.template.toml'), 'utf8').replace('\$ACCOUNT', accountId)
 
-    fs.writeFileSync(dir + 'index.js', index)
-    fs.writeFileSync(dir + 'wrangler.toml', wrangler)
+    fs.writeFileSync(dir('index.js'), index)
+    fs.writeFileSync(dir('wrangler.toml'), wrangler)
   } catch(err) {}
 }
 
