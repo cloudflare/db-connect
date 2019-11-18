@@ -5,6 +5,7 @@
   "main": "index.js",
   "author": "Ashcon Partovi <ashcon@cloudflare.com>",
   "dependencies": {
-    "@cloudflare/db-connect": "0.0.5"
+    "@cloudflare/db-connect": "0.0.5",
+    "ua-parser-js": "^0.7.20"
   }
 }
