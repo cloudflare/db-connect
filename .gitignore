@@ -6,3 +6,4 @@ example/node_modules/
 example/worker/
 example/index.js
 example/wrangler.toml
+example/package-lock.json

@@ -1,6 +1,6 @@
 # db-connect
 
-### This is an experimental project, it has not yet been released and may be removed at any time.
+### This is an experimental project and does not have official support yet.
 
 Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com/). Import this lightweight Javascript library to execute commands or cache queries from a database through an [Argo Tunnel](https://developers.cloudflare.com/argo-tunnel/quickstart/). Although designed for Workers, this library can be used in any environment that has access to the [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Syntax) and [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#Syntax) APIs.
 
@@ -16,9 +16,9 @@ npm i -s @cloudflare/db-connect
 import { DbConnect } from '@cloudflare/db-connect'
 
 const db = new DbConnect({
-  host: 'sql.mysite.com',
-  clientId: 'xxx',
-  clientSecret: 'xxx'
+  host: 'sql.mysite.com', // Hostname of an Argo Tunnel
+  clientId: 'xxx', // Client ID of an Access service token
+  clientSecret: 'xxx' // Client Secret of an Access service token
 })
 
 async function findBirthday(name) {
