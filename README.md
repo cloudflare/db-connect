@@ -1,8 +1,8 @@
-# db-connect
+# ~~db-connect~~
 
-### This is an experimental project and does not have official support yet.
+### :warning: This was an experimental project and is [not supported.](https://github.com/cloudflare/db-connect/issues/10)
 
-Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com/). Import this lightweight Javascript library to execute commands or cache queries from a database through an [Argo Tunnel](https://developers.cloudflare.com/argo-tunnel/quickstart/). Although designed for Workers, this library can be used in any environment that has access to the [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Syntax) and [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#Syntax) APIs.
+Connect your SQL database to [Cloudflare Workers](https://workers.cloudflare.com/). Import this lightweight Javascript library to execute commands or cache queries from a database through an [Argo Tunnel](https://github.com/cloudflare/cloudflared/releases/tag/2021.2.2). Although designed for Workers, this library can be used in any environment that has access to the [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Syntax) and [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#Syntax) APIs.
 
 # Installation
 
@@ -61,8 +61,6 @@ db-connect-quickstart
 * [MSSQL](https://github.com/denisenkom/go-mssqldb)
 * [Clickhouse](https://github.com/kshvakov/clickhouse)
 * [SQLite3](https://github.com/mattn/go-sqlite3)
-
-In the future, we may consider adding support for more databases such as Oracle, MongoDB, and Redis. If you want to contribute you can track the code in the [`cloudflared`](https://github.com/cloudflare/cloudflared/tree/master/dbconnect) repository.
 
 # Documentation
 
@@ -137,7 +135,3 @@ If you want to test `db-connect` without a database you can use the following co
 ```bash
 cloudflared db-connect --playground
 ```
-
-# Beta Access
-
-We are looking for beta testers who want to create applications using `db-connect` using Cloudflare Workers. If you have a use-case or an idea, [reach out](mailto:ashcon@cloudflare.com) to us and we'll consider giving you with special access!
